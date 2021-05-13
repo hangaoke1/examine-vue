@@ -1,0 +1,323 @@
+@blueColor: #1890ff;
+@orangeColor: #f78b22;
+@greenColor: #30b039;
+@lineColor: #c2c5cc;
+@backgroundColor: #f5f6f9;
+
+.flow-editor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 100%;
+  font-size: 14px;
+  background-color: @backgroundColor;
+  overflow: auto;
+
+  &-toolbar {
+    position: fixed;
+    top: 50px;
+    right: 130px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__scale {
+      width: 50px;
+      text-align: center;
+      font-weight: bold;
+    }
+  }
+
+  &-view {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding: 50px 0;
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+    min-width: min-content;
+    transform-origin: 50% 0px 0px;
+
+    // 添加节点
+    .add-node-btn {
+      .add-node-reference {
+        position: absolute;
+        left: 50%;
+        bottom: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 25px;
+        height: 25px;
+        border-radius: 25px;
+        background: @blueColor;
+        color: #fff;
+        font-weight: bold;
+        font-size: 16px;
+        z-index: 10;
+        cursor: pointer;
+        transform: translate(-50%);
+        transition: box-shadow 0.3s ease;
+
+        &:hover {
+          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
+        }
+      }
+    }
+
+    .flow-route-node {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+
+      .top-h-line {
+        height: 2px;
+        background-color: #c2c5cc;
+        margin-top: 13px;
+        margin-bottom: -15px;
+      }
+
+      .bottom-h-line {
+        height: 2px;
+        background-color: #c2c5cc;
+      }
+
+      >.v-line {
+        height: 100px;
+        width: 2px;
+        margin-left: 50%;
+        transform: translateX(-50%);
+        background-color: #c2c5cc;
+      }
+
+      .branchs {
+        display: flex;
+        justify-content: center;
+      }
+
+      .flow-branch-node {
+        padding: 0 50px;
+
+        .top-v-line {
+          display: block;
+        }
+      }
+
+      .flow-branch-node:first-child {
+        >.top-line-mask {
+          display: block;
+          left: 0;
+        }
+
+        >.bottom-line-mask {
+          display: block;
+          left: -1px;
+        }
+      }
+
+      .flow-branch-node:last-child {
+        >.top-line-mask {
+          display: block;
+          right: 0;
+        }
+
+        >.bottom-line-mask {
+          display: block;
+          right: -1px;
+        }
+      }
+    }
+
+    .add-branch-btn {
+      box-sizing: border-box;
+      align-self: center;
+      margin-bottom: 20px;
+      padding: 0 10px;
+      height: 30px;
+      font-size: 12px;
+      color: @blueColor;
+      line-height: 30px;
+      text-align: center;
+      border: 1px solid @blueColor;
+      border-radius: 13px;
+      background: #fff;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    .flow-branch-node {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .nodes {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      >.top-line-mask {
+        display: none;
+        position: absolute;
+        top: -38px;
+        width: 50%;
+        height: 4px;
+        background: #f5f6f9;
+      }
+
+      >.top-v-line {
+        display: none;
+        position: absolute;
+        top: -37px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 2px;
+        background-color: #c2c5cc;
+        height: 37px;
+      }
+
+      >.bottom-v-line {
+        display: block;
+        width: 2px;
+        background-color: #c2c5cc;
+        flex-grow: 1;
+      }
+
+      >.bottom-line-mask {
+        display: none;
+        position: absolute;
+        width: 50%;
+        height: 6px;
+        bottom: 0;
+        transform: translateY(3px);
+        background: #f5f6f9;
+      }
+    }
+
+    .flow-editor-node {
+      position: relative;
+      width: 200px;
+      height: 150px;
+
+      .flow-editor-node-container {
+        box-sizing: border-box;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 200px;
+        max-height: 100px;
+        border-radius: 5px;
+        background: transparent;
+        z-index: 10;
+        cursor: pointer;
+        transition: box-shadow 0.3s ease;
+
+        .close-btn {
+          position: absolute;
+          top: 5px;
+          right: 5px;
+          color: #fff;
+        }
+
+        &:hover {
+          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
+
+          .arrow-left {
+            display: block;
+          }
+
+          .arrow-right {
+            display: block;
+          }
+        }
+      }
+
+      .node-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #fff;
+        padding: 8px 20px 8px 10px;
+        font-weight: 600;
+        font-size: 12px;
+      }
+
+      .node-content {
+        margin: 0 5px 5px 5px;
+        padding: 8px 5px;
+        border-radius: 2px;
+        background: #fff;
+      }
+
+      >.v-line {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background-color: @lineColor;
+        z-index: 1;
+      }
+
+      .close-modal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .node-content__inner {
+        line-height: 1.5;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      .node-content__placeholder {
+        color: #999;
+      }
+
+      .el-icon-warning {
+        color: #ff4d4f;
+        position: absolute;
+        top: 0;
+        right: -25px;
+        font-size: 22px;
+      }
+    }
+  }
+}
+
+.add-node-popover {
+  padding: 0 !important;
+
+  .add-node-item {
+    list-style: none;
+    line-height: 36px;
+    padding: 0 20px;
+    margin: 0;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+
+    &:hover {
+      background-color: #ecf5ff;
+      color: @blueColor;
+    }
+  }
+}
