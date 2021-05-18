@@ -2,6 +2,7 @@
   <div class="flow-editor">
     <!-- 工具条 -->
     <div class="flow-editor-toolbar">
+      <el-button type="text" @click="previewXML">查看XML</el-button>
       <el-button
         :disabled="scale <= 0.5"
         icon="el-icon-minus"
@@ -19,18 +20,39 @@
 
     <!-- 编辑节点数据 -->
     <edit-panel v-model="showEdit" :node="editNode"></edit-panel>
+
+    <el-dialog v-model="showXml" title="流程XML" width="900px" append-to-body destroy-on-close>
+      <monaco-editor
+        :value="xmlContent"
+        :options="{
+          fontSize: 14
+        }"
+        width="850"
+        height="500"
+        theme="vs-dark"
+        language="xml"
+      ></monaco-editor>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="showXml = false">确 定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import FlowEditorStore from '@/lib/flow'
+import MonacoEditor from '@/components/MancoEditor/index.vue'
 import FlowBranchNode from './nodes/FlowBranchNode.vue'
 import EditPanel from './panel/EditPanel.vue'
+
+import FlowEditorStore from '@/lib/flow'
 import eventbus from './eventbus'
 
 export default {
   name: 'FlowEditor',
   components: {
+    MonacoEditor,
     FlowBranchNode,
     EditPanel,
   },
@@ -47,6 +69,8 @@ export default {
       flowStore: null, // 审批流实例
       showEdit: false,
       editNode: null, // 编辑节点
+      showXml: false,
+      xmlContent: '',
     }
   },
   computed: {
@@ -62,10 +86,14 @@ export default {
 
     eventbus.on('node_click', this.handleNodeClick)
   },
-  destroyed() {
+  umounted() {
     eventbus.off('node_click', this.handleNodeClick)
   },
   methods: {
+    previewXML() {
+      this.xmlContent = this.flowStore.buildXML()
+      this.showXml = true
+    },
     handleNodeClick(node) {
       this.editNode = node
       this.showEdit = true

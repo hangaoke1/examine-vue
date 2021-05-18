@@ -11,7 +11,7 @@ export function outputBranch(result, branchNode, routeNode) {
   branchNode.data.children.forEach((node, index) => {
     // 输出节点
     if (nodeType.includes(node.type)) {
-      result.nodeList.push(Object.assign({ type: node.type }, node.data))
+      result.nodeList.push(Object.assign({ type: node.type, id: node.id }, node.data))
     }
 
     if (index === 0) {
@@ -40,8 +40,8 @@ function outputLine(result, preNode, currentNode, routeNode) {
       if (['START', 'APPROVAL', 'ACTION'].includes(preNode.type)) {
         Object.assign(line, {
           id: `LINE_${nanoid()}`,
-          srcId: preNode.data.id,
-          dstId: currentNode.data.id,
+          srcId: preNode.id,
+          dstId: currentNode.id,
         })
         result.lineList.push(line)
       }
@@ -50,8 +50,8 @@ function outputLine(result, preNode, currentNode, routeNode) {
       if (['START', 'APPROVAL', 'ACTION'].includes(preNode.type)) {
         Object.assign(line, {
           id: `LINE_${nanoid()}`,
-          srcId: preNode.data.id,
-          dstId: currentNode.data.id,
+          srcId: preNode.id,
+          dstId: currentNode.id,
         })
         result.lineList.push(line)
       }
@@ -60,8 +60,8 @@ function outputLine(result, preNode, currentNode, routeNode) {
       if (['START', 'APPROVAL', 'ACTION'].includes(preNode.type)) {
         Object.assign(line, {
           id: `LINE_${nanoid()}`,
-          srcId: preNode.data.id,
-          dstId: currentNode.data.id,
+          srcId: preNode.id,
+          dstId: currentNode.id,
         })
         result.lineList.push(line)
       }
@@ -71,8 +71,8 @@ function outputLine(result, preNode, currentNode, routeNode) {
       })
       break
     case 'CONDITION':
-      line.id = currentNode.data.id
-      line.srcId = routeNode.data.id
+      line.id = currentNode.id
+      line.srcId = routeNode.id
       line.priority = currentNode.data.priority
       line.name = currentNode.data.name
       line.conditionGroupList = currentNode.data.conditionGroupList
@@ -82,8 +82,8 @@ function outputLine(result, preNode, currentNode, routeNode) {
       if (['START', 'APPROVAL', 'ACTION'].includes(preNode.type)) {
         Object.assign(line, {
           id: `LINE_${nanoid()}`,
-          srcId: preNode.data.id,
-          dstId: currentNode.data.id,
+          srcId: preNode.id,
+          dstId: currentNode.id,
         })
         result.lineList.push(line)
       }
@@ -94,8 +94,8 @@ function outputLine(result, preNode, currentNode, routeNode) {
   // 如果前一个节点是条件节点则需要对条件节点生成line补齐dstId
   if (preNode.type === 'CONDITION') {
     result.lineList.find(e => {
-      return e.id === preNode.data.id
-    }).dstId = currentNode.data.id
+      return e.id === preNode.id
+    }).dstId = currentNode.id
   }
 
   // 前一个节点是ROUTE，则将ROUTE下，每项的最后一个节点 与当前节点相连
@@ -111,8 +111,8 @@ function outputRouteLineToNextNode(result, routeNode, currentNode) {
     const lastBranchChild = branchChildren[branchChildren.length - 1]
     const c = {
       id: `LINE_${nanoid()}`,
-      dstId: currentNode.data.id,
-      srcId: lastBranchChild.data.id,
+      dstId: currentNode.id,
+      srcId: lastBranchChild.id,
       priority: 1,
       conditionGroupList: [],
     }
@@ -127,7 +127,7 @@ function outputRouteLineToNextNode(result, routeNode, currentNode) {
       // 如果branch只有一个条件节点，则通过全局匹配，将原来未设置dstId的line找出，并赋值
       result.lineList.forEach(line => {
         // 匹配由条件节点生成的line
-        line.id === lastBranchChild.data.id && (line.dstId = currentNode.data.id)
+        line.id === lastBranchChild.id && (line.dstId = currentNode.id)
       })
     }
   })

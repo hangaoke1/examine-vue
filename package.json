@@ -7,17 +7,21 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@babel/runtime-corejs3": "^7.14.0",
     "element-plus": "^1.0.2-beta.44",
     "less": "^4.1.1",
     "loadsh": "^0.0.4",
     "lodash": "^4.17.21",
     "mitt": "^2.1.0",
+    "monaco-editor-vue": "^1.0.10",
     "nanoid": "^3.1.22",
-    "vue": "^3.0.5"
+    "vue": "^3.0.5",
+    "xml-js": "^1.6.11",
+    "xml-js-pro": "1.6.12"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.2",
     "@vue/compiler-sfc": "^3.0.5",
-    "vite": "^2.2.3"
+    "vite": "^2.3.2"
   }
 }

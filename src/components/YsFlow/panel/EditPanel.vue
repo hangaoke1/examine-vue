@@ -31,7 +31,6 @@ export default {
   },
   watch: {
     '$attrs.modelValue'(val) {
-      console.log(this.node.data.name)
       if (val) {
         this.editNode = _.cloneDeep(this.node)
       }

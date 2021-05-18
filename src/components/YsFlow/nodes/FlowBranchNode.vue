@@ -4,7 +4,6 @@
     <div class="top-v-line"></div>
     <div class="nodes">
       <template v-for="childNode in node.data.children">
-        <!-- 路由节点 -->
         <flow-route-node
           v-if="childNode.type === 'ROUTE'"
           :key="childNode.id"

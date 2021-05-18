@@ -1,0 +1,17 @@
+<process displayName="流程测试" name="process">
+    <start displayName="开始" name="START">
+        <transition name="LINE_yslC2MJHY2Xy4YqFIQLSA" to="ROUTE_Cckkw0hdzkHyT7JBIKul8"/>
+    </start>
+    <decision displayName="路由" name="ROUTE_Cckkw0hdzkHyT7JBIKul8">
+        <transition displayName="条件节点1" name="CONDITION_YFLY_clPoXkTZx_HuaDqx" expr="" to="ACTION_oKrqCrRkA6bkkXsdJn6ei"/>
+        <transition displayName="条件节点2" name="CONDITION_PdfUOv7n78WjmvVgXnc90" expr="" to="APPROVAL_mo7p4jYVbNq9UpftdVP8s"/>
+        <transition displayName="默认" name="CONDITION_xISzi8t99HxTDiglS2Eq4" expr="[]" to="APPROVAL_mo7p4jYVbNq9UpftdVP8s"/>
+    </decision>
+    <custom displayName="动作" name="ACTION_oKrqCrRkA6bkkXsdJn6ei" localArgs="" clzName="ccTask">
+        <transition name="LINE_mmhXDrhpQi4qF1BCgwHdr" to="APPROVAL_mo7p4jYVbNq9UpftdVP8s"/>
+    </custom>
+    <task displayName="审批" name="APPROVAL_mo7p4jYVbNq9UpftdVP8s" autoAudit="1" assignee="" assignType="0" spare="-1" performType="ALL" localArgs="">
+        <transition name="LINE_KyxAIKTqaklIUmwKepHp8" to="END"/>
+    </task>
+    <end displayName="结束" name="END"/>
+</process>

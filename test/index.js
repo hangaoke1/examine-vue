@@ -1,43 +1,16 @@
-/* eslint-disable indent */
-import _ from 'lodash'
-import { nanoid } from 'nanoid'
-import xmlConvert from 'xml-js-pro'
-import { outputBranch } from './outputBranch'
-
-const encodeXMLAttr = value => {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/ /g, '&nbsp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-}
-
 export default class FlowEditorStore {
   constructor({ rootNode } = {}) {
     this.rootNode = rootNode || this.initDefault()
     this.nodeTypes = ['START', 'END', 'APPROVAL', 'ACTION', 'ROUTE', 'BRANCH', 'CONDITION']
-    this.nodeTypeToTag = {
-      START: 'start',
-      END: 'end',
-      APPROVAL: 'task',
-      ACTION: 'custom',
-      ROUTE: 'decision',
-    }
     this.errorNodes = []
     this.idNodeMap = new Map()
     this.idParentMap = new Map()
-    this.typeNodeMap = new Map(
+    this.typeIdNodeMap = new Map(
       this.nodeTypes.map(v => {
         return [v, new Map()]
       }),
     )
     this.addDescendantsToMap(this.rootNode)
-  }
-
-  convertNode(node) {
-    return {}
   }
 
   buildXMLObject(name) {
@@ -54,8 +27,6 @@ export default class FlowEditorStore {
 
     outputBranch(result, this.rootNode)
 
-    console.log(`[debug] result`, result)
-
     result.nodeList.forEach(node => {
       const item = {
         _attributes: {
@@ -64,17 +35,17 @@ export default class FlowEditorStore {
         },
       }
       if (node.type === 'APPROVAL') {
-        item._attributes = Object.assign(item._attributes, this.convertNode(node))
+        item._attributes = Object.assign(item._attributes, this.convertApproval(node))
       } else if (node.type === 'ACTION') {
-        item._attributes = Object.assign(item._attributes, this.convertNode(node))
+        item._attributes = Object.assign(item._attributes, this.convertAction(node))
       }
 
       const lineList = result.lineList.filter(v => v.srcId === node.id)
       const transitionList = lineList.map(line => {
         if (node.type === 'ROUTE') {
-          const condition = (line.conditionGroupList || []).map(conditionGroup => {
+          const condition = line.conditionGroupList.map(conditionGroup => {
             return conditionGroup.map(condition => {
-              this.convertNode(condition)
+              this.convertCondition(condition)
             })
           })
           return {
@@ -103,8 +74,16 @@ export default class FlowEditorStore {
       nodeMap.set(node.type, Array.isArray(l) ? [...l, item] : [item])
     })
 
+    const tagMap = {
+      START: 'start',
+      END: 'end',
+      APPROVAL: 'task',
+      ACTION: 'custom',
+      ROUTE: 'decision',
+    }
+
     nodeMap.forEach((nodeList, type) => {
-      const tagName = this.nodeTypeToTag[type]
+      const tagName = tagMap[type]
       if (nodeList.length) {
         xmlObject.process[tagName] = nodeList
       }
@@ -121,10 +100,6 @@ export default class FlowEditorStore {
     })
   }
 
-  /**
-   * 初始化节点
-   * @returns {Node}
-   */
   initDefault() {
     const startNode = this.createStartNode()
     const endNode = this.createEndNode()
@@ -151,7 +126,7 @@ export default class FlowEditorStore {
   addNodeToMap(node, parent) {
     this.idNodeMap.set(node.id, node)
     this.idParentMap.set(node.id, parent)
-    this.typeNodeMap.get(node.type).set(node.id, node)
+    this.typeIdNodeMap.get(node.type).set(node.id, node)
   }
 
   // 从map中删除当前节点及其后代
@@ -165,7 +140,7 @@ export default class FlowEditorStore {
   deleteNodeFromMap(node) {
     this.idNodeMap.delete(node.id)
     this.idParentMap.delete(node.id)
-    this.typeNodeMap.get(node.type).delete(node.id)
+    this.typeIdNodeMap.get(node.type).delete(node.id)
   }
 
   // 深度递归方式查找节点
@@ -189,7 +164,7 @@ export default class FlowEditorStore {
 
   /**
    * 创建开始节点
-   * @returns {Node}
+   * @returns {node}
    */
   createStartNode() {
     return {
@@ -207,7 +182,7 @@ export default class FlowEditorStore {
 
   /**
    * 创建结束节点
-   * @returns {Node}
+   * @returns {node}
    */
   createEndNode() {
     return {
@@ -226,7 +201,7 @@ export default class FlowEditorStore {
   /**
    * 创建审批节点
    * @param {string} parentBranchId 父分支id
-   * @returns {Node}
+   * @returns {node}
    */
   createApprovalNode({ parentBranchId }) {
     const node = {
@@ -246,7 +221,7 @@ export default class FlowEditorStore {
   /**
    * 创建动作节点
    * @param {string} parentBranchId 父分支id
-   * @returns {Node}
+   * @returns {node}
    */
   createActionNode({ parentBranchId }) {
     return {
@@ -265,7 +240,7 @@ export default class FlowEditorStore {
   /**
    * 创建路由节点
    * @param {string} parentBranchId 父分支id
-   * @returns {Node}
+   * @returns {node}
    */
   createRouteNode({ parentBranchId }) {
     const routeNode = {
@@ -297,7 +272,7 @@ export default class FlowEditorStore {
   /**
    * 创建分支节点
    * @param {string} parentRouteId 父路由节点id
-   * @returns {Node}
+   * @returns {node}
    */
   createBranchNode({ parentRouteId }) {
     return {
@@ -318,7 +293,7 @@ export default class FlowEditorStore {
    * @param {string} parentBranchId 父BRANCH节点id
    * @param {boolean} isDefault 是否是默认节点
    * @param {number} index 节点所在分支序号
-   * @returns {Node}
+   * @returns {node}
    */
   createConditionNode({ parentBranchId, isDefault, index = '' }) {
     return {
@@ -401,13 +376,13 @@ export default class FlowEditorStore {
     branchNode.data.children.push(conditionNode)
 
     this.addChild(branchNode, routeNode, routeNode.data.children.length - 1)
-    this.updateConditionPriority(routeNode)
+    this.updatePriority(routeNode)
   }
 
   /**
    * 移动CONDITION节点
    * @param {string} id CONDITION节点id
-   * @param {string|number} to 目标位置
+   * @param {string} to 目标位置
    */
   moveCondition(id, to) {
     const conditionNode = this.idNodeMap.get(id)
@@ -423,14 +398,14 @@ export default class FlowEditorStore {
     routeNode.data.children = [...routeNode.data.children]
 
     // 更新权重
-    this.updateConditionPriority(routeNode)
+    this.updatePriority(routeNode)
   }
 
   /**
    * 更新条件分支权重
    * @param {Node} routeNode ROUTE节点
    */
-  updateConditionPriority(routeNode) {
+  updatePriority(routeNode) {
     routeNode.data.children.forEach((branchNode, index) => {
       branchNode.data.children[0].data.priority = index + 1
     })
@@ -464,7 +439,7 @@ export default class FlowEditorStore {
         // 删除当前branch
         routeNode.data.children.splice(routeNode.data.children.indexOf(branchNode), 1)
         this.deleteDescendantsFromMap(branchNode) // 删除branchNode下所有节点的map映射
-        this.updateConditionPriority(routeNode)
+        this.updatePriority(routeNode)
       } else {
         // 删除整棵route
         const routeParentNode = this.idParentMap.get(routeNode.id)
@@ -474,9 +449,7 @@ export default class FlowEditorStore {
     }
   }
 
-  /**
-   * 节点数据校验，根据业务实际情况，自定义校验规则
-   */
+  // 节点数据校验，根据业务实际情况，自定义校验规则
   validate() {
     this.errorNodes = []
     this.validateNode(this.rootNode)
