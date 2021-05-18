@@ -21,7 +21,7 @@
     <!-- 编辑节点数据 -->
     <edit-panel v-model="showEdit" :node="editNode"></edit-panel>
 
-    <el-dialog v-model="showXml" title="流程XML" width="900px" append-to-body destroy-on-close>
+    <el-dialog v-model="showXml" title="流程XML" width="900px" append-to-body>
       <monaco-editor
         :value="xmlContent"
         :options="{
@@ -34,7 +34,7 @@
       ></monaco-editor>
       <template #footer>
         <span class="dialog-footer">
-          <el-button type="primary" @click="showXml = false">确 定</el-button>
+          <el-button type="primary" @click="showXml = false">关 闭</el-button>
         </span>
       </template>
     </el-dialog>

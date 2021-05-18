@@ -71,6 +71,9 @@ export default {
   },
 
   mounted() {
+    // this.initMonaco()
+
+    // 此处放到nextTick中，否则在el-dialog中因为懒渲染，会导致初始化monaco时候，布局异常
     this.$nextTick(() => {
       this.initMonaco()
     })
