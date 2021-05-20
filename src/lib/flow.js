@@ -40,6 +40,11 @@ export default class FlowEditorStore {
     return {}
   }
 
+  /**
+   * 生成XML对象
+   * @param {string} name 审批流名称 
+   * @returns 
+   */
   buildXMLObject(name) {
     const nodeMap = new Map()
     const result = { lineList: [], nodeList: [] }
@@ -123,7 +128,7 @@ export default class FlowEditorStore {
 
   /**
    * 初始化节点
-   * @returns {Node}
+   * @returns {Node} 审批流根节点
    */
   initDefault() {
     const startNode = this.createStartNode()
@@ -140,7 +145,11 @@ export default class FlowEditorStore {
     }
   }
 
-  // 添加当前节点及其后代到map
+  /**
+   * 递归当前节点及其后代节点，并添加map关系
+   * @param {Node} node 当前节点
+   * @param {Node} parent 父节点
+   */
   addDescendantsToMap(node, parent) {
     this.addNodeToMap(node, parent)
     node.data.children.forEach(subNode => {
@@ -148,13 +157,21 @@ export default class FlowEditorStore {
     })
   }
 
+  /**
+   * 添加map关系
+   * @param {Node} node 当前节点
+   * @param {Node} parent 父节点
+   */
   addNodeToMap(node, parent) {
     this.idNodeMap.set(node.id, node)
     this.idParentMap.set(node.id, parent)
     this.typeNodeMap.get(node.type).set(node.id, node)
   }
 
-  // 从map中删除当前节点及其后代
+  /**
+   * 深度递归遍历当前节点及其子节点，并移除map关系
+   * @param {Node} node 当前节点
+   */
   deleteDescendantsFromMap(node) {
     this.deleteNodeFromMap(node)
     node.data.children.forEach(subNode => {
@@ -162,17 +179,31 @@ export default class FlowEditorStore {
     })
   }
 
+  /**
+   * 移除map关系
+   * @param {Node} node 当前节点
+   */
   deleteNodeFromMap(node) {
     this.idNodeMap.delete(node.id)
     this.idParentMap.delete(node.id)
     this.typeNodeMap.get(node.type).delete(node.id)
   }
 
-  // 深度递归方式查找节点
+  /**
+   * 根据id查找节点
+   * @param {string} id 节点id
+   * @returns 
+   */
   findNodeById(id) {
     return this.findNodeRecursively(this.rootNode, id)
   }
 
+  /**
+   * 深度递归方式查找节点
+   * @param {Node} node 当前节点
+   * @param {string} id 节点id
+   * @returns 
+   */
   findNodeRecursively(node, id) {
     if (node.id === id) {
       return node
@@ -225,7 +256,8 @@ export default class FlowEditorStore {
 
   /**
    * 创建审批节点
-   * @param {string} parentBranchId 父分支id
+   * @param {object} param 参数
+   * @param {string} param.parentBranchId 父分支id
    * @returns {Node}
    */
   createApprovalNode({ parentBranchId }) {
@@ -245,7 +277,8 @@ export default class FlowEditorStore {
 
   /**
    * 创建动作节点
-   * @param {string} parentBranchId 父分支id
+   * @param {object} param 参数
+   * @param {string} param.parentBranchId 父分支id
    * @returns {Node}
    */
   createActionNode({ parentBranchId }) {
@@ -264,7 +297,8 @@ export default class FlowEditorStore {
 
   /**
    * 创建路由节点
-   * @param {string} parentBranchId 父分支id
+   * @param {object} param 参数
+   * @param {string} param.parentBranchId 父分支id
    * @returns {Node}
    */
   createRouteNode({ parentBranchId }) {
@@ -296,7 +330,8 @@ export default class FlowEditorStore {
 
   /**
    * 创建分支节点
-   * @param {string} parentRouteId 父路由节点id
+   * @param {object} param 参数
+   * @param {string} param.parentRouteId 父路由节点id
    * @returns {Node}
    */
   createBranchNode({ parentRouteId }) {
@@ -315,9 +350,10 @@ export default class FlowEditorStore {
 
   /**
    * 创建条件节点
-   * @param {string} parentBranchId 父BRANCH节点id
-   * @param {boolean} isDefault 是否是默认节点
-   * @param {number} index 节点所在分支序号
+   * @param {object} param 参数
+   * @param {string} param.parentBranchId 父BRANCH节点id
+   * @param {boolean} param.isDefault 是否是默认节点
+   * @param {number} param.index 节点所在分支序号
    * @returns {Node}
    */
   createConditionNode({ parentBranchId, isDefault, index = '' }) {
@@ -337,8 +373,9 @@ export default class FlowEditorStore {
 
   /**
    * 添加节点
-   * @param {string} preNodeId 当前节点id
-   * @param {string} nodeType 需要添加的节点类型
+   * @param {object} param 参数
+   * @param {string} param.preNodeId 当前节点id
+   * @param {string} param.nodeType 需要添加的节点类型
    */
   addNext(preNodeId, nodeType) {
     let node
