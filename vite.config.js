@@ -4,8 +4,9 @@ import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/examine-vue/',
   build: {
-    assetsDir: ''
+    assetsDir: '',
   },
   resolve: {
     alias: {
