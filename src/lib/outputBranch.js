@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid'
+
 /**
  * 将 nodeTree 转换成 { lineList: [], nodeList: [] }
  * @param {object} result {lineList: [], nodeList: [] }
@@ -39,7 +40,7 @@ function outputLine(result, preNode, currentNode, routeNode) {
     case 'APPROVAL':
       if (['START', 'APPROVAL', 'ACTION'].includes(preNode.type)) {
         Object.assign(line, {
-          id: `LINE_${nanoid()}`,
+          id: `LINE_${nanoid(8)}`,
           srcId: preNode.id,
           dstId: currentNode.id,
         })
@@ -49,7 +50,7 @@ function outputLine(result, preNode, currentNode, routeNode) {
     case 'ACTION':
       if (['START', 'APPROVAL', 'ACTION'].includes(preNode.type)) {
         Object.assign(line, {
-          id: `LINE_${nanoid()}`,
+          id: `LINE_${nanoid(8)}`,
           srcId: preNode.id,
           dstId: currentNode.id,
         })
@@ -59,7 +60,7 @@ function outputLine(result, preNode, currentNode, routeNode) {
     case 'ROUTE':
       if (['START', 'APPROVAL', 'ACTION'].includes(preNode.type)) {
         Object.assign(line, {
-          id: `LINE_${nanoid()}`,
+          id: `LINE_${nanoid(8)}`,
           srcId: preNode.id,
           dstId: currentNode.id,
         })
@@ -81,7 +82,7 @@ function outputLine(result, preNode, currentNode, routeNode) {
     case 'END':
       if (['START', 'APPROVAL', 'ACTION'].includes(preNode.type)) {
         Object.assign(line, {
-          id: `LINE_${nanoid()}`,
+          id: `LINE_${nanoid(8)}`,
           srcId: preNode.id,
           dstId: currentNode.id,
         })
@@ -105,12 +106,18 @@ function outputLine(result, preNode, currentNode, routeNode) {
   }
 }
 
+/**
+ *
+ * @param {object} result
+ * @param {Node} routeNode
+ * @param {Node} currentNode
+ */
 function outputRouteLineToNextNode(result, routeNode, currentNode) {
   routeNode.data.children.forEach(branchNode => {
     const branchChildren = branchNode.data.children
     const lastBranchChild = branchChildren[branchChildren.length - 1]
     const c = {
-      id: `LINE_${nanoid()}`,
+      id: `LINE_${nanoid(8)}`,
       dstId: currentNode.id,
       srcId: lastBranchChild.id,
       priority: 1,

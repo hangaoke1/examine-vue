@@ -21,13 +21,13 @@
     <!-- 编辑节点数据 -->
     <edit-panel v-model="showEdit" :node="editNode"></edit-panel>
 
-    <el-dialog v-model="showXml" title="流程XML" width="900px" append-to-body>
+    <el-dialog v-model="showXml" title="流程XML" width="1050px" append-to-body>
       <monaco-editor
         :value="xmlContent"
         :options="{
           fontSize: 14
         }"
-        width="850"
+        width="1000"
         height="500"
         theme="vs-dark"
         language="xml"

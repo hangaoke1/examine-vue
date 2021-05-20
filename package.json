@@ -4,11 +4,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@babel/runtime-corejs3": "^7.14.0",
     "element-plus": "^1.0.2-beta.44",
+    "gh-pages": "^3.1.0",
     "less": "^4.1.1",
     "loadsh": "^0.0.4",
     "lodash": "^4.17.21",

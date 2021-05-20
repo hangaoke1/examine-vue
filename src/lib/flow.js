@@ -230,7 +230,7 @@ export default class FlowEditorStore {
    */
   createApprovalNode({ parentBranchId }) {
     const node = {
-      id: `APPROVAL_${nanoid()}`,
+      id: `APPROVAL_${nanoid(8)}`,
       type: 'APPROVAL',
       isError: false,
       errors: [],
@@ -250,7 +250,7 @@ export default class FlowEditorStore {
    */
   createActionNode({ parentBranchId }) {
     return {
-      id: `ACTION_${nanoid()}`,
+      id: `ACTION_${nanoid(8)}`,
       type: 'ACTION',
       isError: false,
       errors: [],
@@ -269,7 +269,7 @@ export default class FlowEditorStore {
    */
   createRouteNode({ parentBranchId }) {
     const routeNode = {
-      id: `ROUTE_${nanoid()}`,
+      id: `ROUTE_${nanoid(8)}`,
       type: 'ROUTE',
       isError: false,
       errors: [],
@@ -301,7 +301,7 @@ export default class FlowEditorStore {
    */
   createBranchNode({ parentRouteId }) {
     return {
-      id: `BRANCH_${nanoid()}`,
+      id: `BRANCH_${nanoid(8)}`,
       type: 'BRANCH',
       isError: false,
       errors: [],
@@ -322,7 +322,7 @@ export default class FlowEditorStore {
    */
   createConditionNode({ parentBranchId, isDefault, index = '' }) {
     return {
-      id: `CONDITION_${nanoid()}`,
+      id: `CONDITION_${nanoid(8)}`,
       type: 'CONDITION',
       isError: false,
       errors: [],
