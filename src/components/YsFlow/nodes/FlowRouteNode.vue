@@ -7,9 +7,9 @@
         v-for="(item, index) in node.data.children"
         :key="item.id"
         :node="item"
+        :route-node="node"
         :branch-index="index"
         :branch-count="node.data.children.length"
-        :route-node="node"
       ></flow-branch-node>
     </div>
     <div class="bottom-h-line"></div>
@@ -26,6 +26,7 @@ const FlowBranchNode = defineAsyncComponent(() => import('./FlowBranchNode.vue')
 
 export default {
   name: 'FlowRouteNode',
+  emits: ['add', 'addBranch'],
   components: {
     AddNodeBtn,
     FlowBranchNode,

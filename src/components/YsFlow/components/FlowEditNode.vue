@@ -35,7 +35,7 @@
 
 <script>
 import AddNodeBtn from './AddNodeBtn.vue';
-import eventbus from '../eventbus';
+import eventbus from '@/lib/eventbus';
 
 /**
  * events
@@ -66,7 +66,7 @@ export default {
       default: '#1890ff',
     },
     titleColor: {
-      // 标题颜色
+      // 节点标题颜色
       type: String,
       default: '#fff',
     },

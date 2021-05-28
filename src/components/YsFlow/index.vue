@@ -52,7 +52,7 @@ import FlowBranchNode from './nodes/FlowBranchNode.vue';
 import EditPanel from './panel/EditPanel.vue';
 
 import FlowEditorStore from '@/lib/flow';
-import eventbus from './eventbus';
+import eventbus from '@/lib/eventbus';
 
 export default {
   name: 'FlowEditor',
