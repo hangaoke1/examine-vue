@@ -32,13 +32,13 @@
 </template>
 
 <script>
-import FlowEditNode from '../components/FlowEditNode.vue'
-import FlowRouteNode from './FlowRouteNode.vue'
+import FlowEditNode from '../components/FlowEditNode.vue';
+import FlowRouteNode from './FlowRouteNode.vue';
 export default {
   name: 'FlowBranchNode',
   components: {
     FlowEditNode,
-    FlowRouteNode
+    FlowRouteNode,
   },
   inject: ['getFlowStore'],
   props: {
@@ -52,25 +52,25 @@ export default {
         END: '#a9b4cd',
         CONDITION: '#52c41a',
         APPROVAL: '#faad14',
-        ACTION: '#722ed1'
-      }
-    }
+        ACTION: '#722ed1',
+      },
+    };
   },
   computed: {
     flowStore() {
-      return this.getFlowStore()
+      return this.getFlowStore();
     },
   },
   methods: {
     handleAddBranch(node) {
-      this.flowStore.addBranch(node.id)
+      this.flowStore.addBranch(node.id);
     },
     handleAdd(node, type) {
-      this.flowStore.addNext(node.id, type)
+      this.flowStore.addNext(node.id, type);
     },
     handleDelete(node) {
-      this.flowStore.deleteNode(node.id)
+      this.flowStore.deleteNode(node.id);
     },
   },
-}
+};
 </script>

@@ -1,10 +1,10 @@
-import _ from 'lodash'
-import nanoid from 'nanoid'
+import _ from 'lodash';
+import nanoid from 'nanoid';
 
 export default class FlowEditorStore {
   constructor({ rootNode } = {}) {
-    this.rootNode = rootNode || this.initDefault()
-    this.nodeTypes = ['START', 'END', 'APPROVAL', 'ACTION', 'ROUTE', 'BRANCH', 'CONDITION']
+    this.rootNode = rootNode || this.initDefault();
+    this.nodeTypes = ['START', 'END', 'APPROVAL', 'ACTION', 'ROUTE', 'BRANCH', 'CONDITION'];
   }
 
   /**
@@ -12,9 +12,9 @@ export default class FlowEditorStore {
    * @returns {Node}
    */
   initDefault() {
-    const startNode = this.createStartNode()
-    const endNode = this.createEndNode()
-    const approvalNode = this.createApprovalNode({ parentBranchId: 'ROOT' })
+    const startNode = this.createStartNode();
+    const endNode = this.createEndNode();
+    const approvalNode = this.createApprovalNode({ parentBranchId: 'ROOT' });
     return {
       id: 'ROOT',
       type: 'BRANCH',
@@ -23,7 +23,7 @@ export default class FlowEditorStore {
       data: {
         children: [startNode, approvalNode, endNode],
       },
-    }
+    };
   }
 
   /**
@@ -47,7 +47,7 @@ export default class FlowEditorStore {
         children: [],
         name: '开始',
       },
-    }
+    };
   }
 
   /**
@@ -65,7 +65,7 @@ export default class FlowEditorStore {
         children: [],
         name: '结束',
       },
-    }
+    };
   }
 
   /**
@@ -84,8 +84,8 @@ export default class FlowEditorStore {
         children: [],
         name: '审批',
       },
-    }
-    return node
+    };
+    return node;
   }
 
   /**
@@ -104,7 +104,7 @@ export default class FlowEditorStore {
         children: [],
         name: '动作',
       },
-    }
+    };
   }
 
   /**
@@ -123,20 +123,20 @@ export default class FlowEditorStore {
         children: [],
         name: '路由',
       },
-    }
+    };
 
     routeNode.data.children = new Array(2).fill('').map((_item, index) => {
-      const branchNode = this.createBranchNode({ parentRouteId: routeNode.id })
+      const branchNode = this.createBranchNode({ parentRouteId: routeNode.id });
       const conditionNode = this.createConditionNode({
         parentBranchId: branchNode.id,
         isDefault: index === 1,
         index: index + 1,
-      })
-      branchNode.data.children.push(conditionNode)
-      return branchNode
-    })
+      });
+      branchNode.data.children.push(conditionNode);
+      return branchNode;
+    });
 
-    return routeNode
+    return routeNode;
   }
 
   /**
@@ -155,7 +155,7 @@ export default class FlowEditorStore {
         children: [],
         name: '分支',
       },
-    }
+    };
   }
 
   /**
@@ -178,7 +178,7 @@ export default class FlowEditorStore {
         name: isDefault ? '默认' : '条件节点' + index,
         isDefault: !!isDefault, // 默认分支，不可修改，不可编辑
       },
-    }
+    };
   }
 
   /**

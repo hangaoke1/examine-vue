@@ -24,21 +24,21 @@ export default {
   data() {
     return {
       titleEdit: false,
-    }
+    };
   },
   methods: {
     showEdit() {
-      if (this.disabled) return
-      this.titleEdit = true
+      if (this.disabled) return;
+      this.titleEdit = true;
     },
     hideEdit() {
-      this.titleEdit = false
+      this.titleEdit = false;
     },
     handleUpdate(value) {
-      this.$emit('update:modelValue', value)
+      this.$emit('update:modelValue', value);
     },
   },
-}
+};
 </script>
 
 <style lang="less" scoped>

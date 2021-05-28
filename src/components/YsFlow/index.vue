@@ -10,7 +10,12 @@
         @click="scaleClick('minus')"
       />
       <span class="flow-editor-toolbar__scale">{{ (scale * 100).toFixed(0) }}%</span>
-      <el-button :disabled="scale > 3" icon="el-icon-plus" size="mini" @click="scaleClick('plus')" />
+      <el-button
+        :disabled="scale > 3"
+        icon="el-icon-plus"
+        size="mini"
+        @click="scaleClick('plus')"
+      />
     </div>
 
     <!-- 审批流主体 -->
@@ -25,7 +30,7 @@
       <monaco-editor
         :value="xmlContent"
         :options="{
-          fontSize: 14
+          fontSize: 14,
         }"
         width="1000"
         height="500"
@@ -42,12 +47,12 @@
 </template>
 
 <script>
-import MonacoEditor from '@/components/MancoEditor/index.vue'
-import FlowBranchNode from './nodes/FlowBranchNode.vue'
-import EditPanel from './panel/EditPanel.vue'
+import MonacoEditor from '@/components/MancoEditor/index.vue';
+import FlowBranchNode from './nodes/FlowBranchNode.vue';
+import EditPanel from './panel/EditPanel.vue';
 
-import FlowEditorStore from '@/lib/flow'
-import eventbus from './eventbus'
+import FlowEditorStore from '@/lib/flow';
+import eventbus from './eventbus';
 
 export default {
   name: 'FlowEditor',
@@ -59,9 +64,9 @@ export default {
   provide() {
     return {
       getFlowStore: () => {
-        return this.flowStore
+        return this.flowStore;
       },
-    }
+    };
   },
   data() {
     return {
@@ -71,42 +76,42 @@ export default {
       editNode: null, // 编辑节点
       showXml: false,
       xmlContent: '',
-    }
+    };
   },
   computed: {
     scaleStyle() {
       return {
         transform: `scale(${this.scale})`,
-      }
+      };
     },
   },
   mounted() {
-    this.flowStore = new FlowEditorStore()
-    window.flowStore = this.flowStore
+    this.flowStore = new FlowEditorStore();
+    window.flowStore = this.flowStore;
 
-    eventbus.on('node_click', this.handleNodeClick)
+    eventbus.on('node_click', this.handleNodeClick);
   },
   umounted() {
-    eventbus.off('node_click', this.handleNodeClick)
+    eventbus.off('node_click', this.handleNodeClick);
   },
   methods: {
     previewXML() {
-      this.xmlContent = this.flowStore.buildXML()
-      this.showXml = true
+      this.xmlContent = this.flowStore.buildXML();
+      this.showXml = true;
     },
     handleNodeClick(node) {
-      this.editNode = node
-      this.showEdit = true
+      this.editNode = node;
+      this.showEdit = true;
     },
     scaleClick(type) {
       if (type === 'minus') {
-        this.scale = this.scale - 0.1
+        this.scale = this.scale - 0.1;
       } else if (type === 'plus') {
-        this.scale = this.scale + 0.1
+        this.scale = this.scale + 0.1;
       }
     },
   },
-}
+};
 </script>
 
 <style lang="less">

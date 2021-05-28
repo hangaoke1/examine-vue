@@ -2,9 +2,7 @@
   <el-drawer v-bind="$attrs" :with-header="false">
     <div v-if="editNode" class="edit-panel">
       <title-input class="edit-panel-title" v-model="editNode.data.name"></title-input>
-      <div class="edit-panel-content">
-        自定义需要编辑的节点数据
-      </div>
+      <div class="edit-panel-content">自定义需要编辑的节点数据</div>
       <div class="edit-panel-footer">
         <el-button>取 消</el-button>
         <el-button type="primary">{{ '确 定' }}</el-button>
@@ -14,8 +12,8 @@
 </template>
 
 <script>
-import _ from 'lodash'
-import TitleInput from '../components/TitleInput.vue'
+import _ from 'lodash';
+import TitleInput from '../components/TitleInput.vue';
 export default {
   name: 'EditPanel',
   components: {
@@ -27,16 +25,16 @@ export default {
   data() {
     return {
       editNode: null,
-    }
+    };
   },
   watch: {
     '$attrs.modelValue'(val) {
       if (val) {
-        this.editNode = _.cloneDeep(this.node)
+        this.editNode = _.cloneDeep(this.node);
       }
     },
   },
-}
+};
 </script>
 
 <style lang="less" scoped>

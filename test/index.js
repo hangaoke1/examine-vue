@@ -2,24 +2,24 @@ export default class FlowEditorStore {
   /**
    * 输出XML
    * @param {string} name 审批流名称
-   * @returns 
+   * @returns
    */
   buildXML(name) {
-    const json = this.buildXMLObject(name)
+    const json = this.buildXMLObject(name);
     return xmlConvert.json2xml(json, {
       compact: true,
       ignoreComment: true,
       spaces: 4,
-    })
+    });
   }
   /**
    * 输出XML描述对象
    * @param {string} name 审批流名称
-   * @returns 
+   * @returns
    */
   buildXMLObject(name) {
-    const nodeMap = new Map()
-    const result = { lineList: [], nodeList: [] }
+    const nodeMap = new Map();
+    const result = { lineList: [], nodeList: [] };
     const xmlObject = {
       process: {
         _attributes: {
@@ -27,9 +27,9 @@ export default class FlowEditorStore {
           name: 'process',
         },
       },
-    }
+    };
 
-    outputBranch(result, this.rootNode)
+    outputBranch(result, this.rootNode);
 
     result.nodeList.forEach(node => {
       const item = {
@@ -37,21 +37,21 @@ export default class FlowEditorStore {
           displayName: encodeXMLAttr(node.name),
           name: node.id,
         },
-      }
+      };
       if (node.type === 'APPROVAL') {
-        item._attributes = Object.assign(item._attributes, this.convertNode(node))
+        item._attributes = Object.assign(item._attributes, this.convertNode(node));
       } else if (node.type === 'ACTION') {
-        item._attributes = Object.assign(item._attributes, this.convertNode(node))
+        item._attributes = Object.assign(item._attributes, this.convertNode(node));
       }
 
-      const lineList = result.lineList.filter(v => v.srcId === node.id)
+      const lineList = result.lineList.filter(v => v.srcId === node.id);
       const transitionList = lineList.map(line => {
         if (node.type === 'ROUTE') {
           const condition = (line.conditionGroupList || []).map(conditionGroup => {
             return conditionGroup.map(condition => {
-              this.convertNode(condition)
-            })
-          })
+              this.convertNode(condition);
+            });
+          });
           return {
             _attributes: {
               displayName: encodeXMLAttr(line.name),
@@ -59,31 +59,31 @@ export default class FlowEditorStore {
               expr: JSON.stringify(condition),
               to: line.dstId,
             },
-          }
+          };
         } else {
           return {
             _attributes: {
               name: line.id,
               to: line.dstId,
             },
-          }
+          };
         }
-      })
+      });
 
       if (transitionList.length) {
-        item.transition = transitionList
+        item.transition = transitionList;
       }
 
-      const l = nodeMap.get(node.type)
-      nodeMap.set(node.type, Array.isArray(l) ? [...l, item] : [item])
-    })
+      const l = nodeMap.get(node.type);
+      nodeMap.set(node.type, Array.isArray(l) ? [...l, item] : [item]);
+    });
 
     nodeMap.forEach((nodeList, type) => {
-      const tagName = this.nodeTypeToTag[type]
+      const tagName = this.nodeTypeToTag[type];
       if (nodeList.length) {
-        xmlObject.process[tagName] = nodeList
+        xmlObject.process[tagName] = nodeList;
       }
-    })
-    return xmlObject
+    });
+    return xmlObject;
   }
 }

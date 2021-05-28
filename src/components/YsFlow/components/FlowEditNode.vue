@@ -34,8 +34,8 @@
 </template>
 
 <script>
-import AddNodeBtn from './AddNodeBtn.vue'
-import eventbus from '../eventbus'
+import AddNodeBtn from './AddNodeBtn.vue';
+import eventbus from '../eventbus';
 
 /**
  * events
@@ -74,27 +74,27 @@ export default {
   data() {
     return {
       showDeleteModal: false,
-    }
+    };
   },
   methods: {
     nodeClick() {
       if (this.node) {
-        eventbus.emit('node_click', this.node)
+        eventbus.emit('node_click', this.node);
       }
     },
     handleAdd(type) {
-      this.$emit('add', type)
+      this.$emit('add', type);
     },
     deleteClick() {
-      this.showDeleteModal = true
+      this.showDeleteModal = true;
     },
     deleteConfirm() {
-      this.$emit('delete')
-      this.showDeleteModal = false
+      this.$emit('delete');
+      this.showDeleteModal = false;
     },
     deleteCancel() {
-      this.showDeleteModal = false
+      this.showDeleteModal = false;
     },
   },
-}
+};
 </script>

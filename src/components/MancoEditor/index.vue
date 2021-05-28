@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 function noop() {}
 
 export default {
@@ -20,7 +20,7 @@ export default {
     options: {
       type: Object,
       default() {
-        return {}
+        return {};
       },
     },
     editorMounted: { type: Function, default: noop },
@@ -31,33 +31,33 @@ export default {
     options: {
       deep: true,
       handler(options) {
-        this.editor && this.editor.updateOptions(options)
+        this.editor && this.editor.updateOptions(options);
       },
     },
 
     value() {
-      this.editor && this.value !== this._getValue() && this._setValue(this.value)
+      this.editor && this.value !== this._getValue() && this._setValue(this.value);
     },
 
     language() {
-      if (!this.editor) return
+      if (!this.editor) return;
       if (this.diffEditor) {
         // diff模式下更新language
-        const { original, modified } = this.editor.getModel()
-        monaco.editor.setModelLanguage(original, this.language)
-        monaco.editor.setModelLanguage(modified, this.language)
-      } else monaco.editor.setModelLanguage(this.editor.getModel(), this.language)
+        const { original, modified } = this.editor.getModel();
+        monaco.editor.setModelLanguage(original, this.language);
+        monaco.editor.setModelLanguage(modified, this.language);
+      } else monaco.editor.setModelLanguage(this.editor.getModel(), this.language);
     },
 
     theme() {
-      this.editor && monaco.editor.setTheme(this.theme)
+      this.editor && monaco.editor.setTheme(this.theme);
     },
 
     style() {
       this.editor &&
         this.$nextTick(() => {
-          this.editor.layout()
-        })
+          this.editor.layout();
+        });
     },
   },
 
@@ -66,7 +66,7 @@ export default {
       return {
         width: !/^\d+$/.test(this.width) ? this.width : `${this.width}px`,
         height: !/^\d+$/.test(this.height) ? this.height : `${this.height}px`,
-      }
+      };
     },
   },
 
@@ -75,84 +75,84 @@ export default {
 
     // 此处放到nextTick中，否则在el-dialog中因为懒渲染，会导致初始化monaco时候，布局异常
     this.$nextTick(() => {
-      this.initMonaco()
-    })
+      this.initMonaco();
+    });
   },
 
   unmounted() {
-    this.editor && this.editor.dispose()
-    this.editor = null
+    this.editor && this.editor.dispose();
+    this.editor = null;
   },
 
   methods: {
     initMonaco() {
-      const { value, language, theme, options } = this
-      Object.assign(options, this._editorBeforeMount()) //编辑器初始化前
+      const { value, language, theme, options } = this;
+      Object.assign(options, this._editorBeforeMount()); //编辑器初始化前
       const finalOptions = {
         value: value,
         language: language,
         theme: theme,
         ...options,
-      }
+      };
       this.editor = monaco.editor[this.diffEditor ? 'createDiffEditor' : 'create'](
         this.$el,
         finalOptions,
-      )
-      this.diffEditor && this._setModel(this.value, this.original)
-      this._editorMounted(this.editor) //编辑器初始化后
+      );
+      this.diffEditor && this._setModel(this.value, this.original);
+      this._editorMounted(this.editor); //编辑器初始化后
     },
 
     _getEditor() {
-      if (!this.editor) return null
-      return this.diffEditor ? this.editor.modifiedEditor : this.editor
+      if (!this.editor) return null;
+      return this.diffEditor ? this.editor.modifiedEditor : this.editor;
     },
 
     _setModel(value, original) {
       //diff模式下设置model
-      const { language } = this
-      const originalModel = monaco.editor.createModel(original, language)
-      const modifiedModel = monaco.editor.createModel(value, language)
+      const { language } = this;
+      const originalModel = monaco.editor.createModel(original, language);
+      const modifiedModel = monaco.editor.createModel(value, language);
       this.editor.setModel({
         original: originalModel,
         modified: modifiedModel,
-      })
+      });
     },
 
     _setValue(value) {
-      let editor = this._getEditor()
-      if (editor) return editor.setValue(value)
+      let editor = this._getEditor();
+      if (editor) return editor.setValue(value);
     },
 
     _getValue() {
-      let editor = this._getEditor()
-      if (!editor) return ''
-      return editor.getValue()
+      let editor = this._getEditor();
+      if (!editor) return '';
+      return editor.getValue();
     },
 
     _editorBeforeMount() {
-      const options = this.editorBeforeMount(monaco)
-      return options || {}
+      const options = this.editorBeforeMount(monaco);
+      return options || {};
     },
 
     _editorMounted(editor) {
-      this.editorMounted(editor, monaco)
+      this.editorMounted(editor, monaco);
       if (this.diffEditor) {
         editor.onDidUpdateDiff(event => {
-          const value = this._getValue()
-          this._emitChange(value, event)
-        })
+          const value = this._getValue();
+          this._emitChange(value, event);
+        });
       } else {
         editor.onDidChangeModelContent(event => {
-          const value = this._getValue()
-          this._emitChange(value, event)
-        })
+          const value = this._getValue();
+          this._emitChange(value, event);
+        });
       }
     },
 
     _emitChange(value, event) {
-      this.$emit('change', value, event)
-      this.$emit('input', value)
+      this.$emit('change', value, event);
+      this.$emit('input', value);
     },
   },
-}
+};
 </script>

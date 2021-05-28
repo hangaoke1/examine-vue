@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
-import AddNodeBtn from '../components/AddNodeBtn.vue'
+import { defineAsyncComponent } from 'vue';
+import AddNodeBtn from '../components/AddNodeBtn.vue';
 
-const FlowBranchNode = defineAsyncComponent(() => import('./FlowBranchNode.vue'))
+const FlowBranchNode = defineAsyncComponent(() => import('./FlowBranchNode.vue'));
 
 export default {
   name: 'FlowRouteNode',
@@ -35,11 +35,11 @@ export default {
   },
   methods: {
     handleAdd(type) {
-      this.$emit('add', type)
+      this.$emit('add', type);
     },
     addBranchClick() {
-      this.$emit('addBranch')
+      this.$emit('addBranch');
     },
   },
-}
+};
 </script>

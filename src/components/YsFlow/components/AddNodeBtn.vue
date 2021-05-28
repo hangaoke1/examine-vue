@@ -30,13 +30,13 @@ export default {
   data() {
     return {
       popoverShow: false,
-    }
+    };
   },
   methods: {
     addClick(nodeType) {
-      this.popoverShow = false
-      this.$emit('add', nodeType)
+      this.popoverShow = false;
+      this.$emit('add', nodeType);
     },
   },
-}
+};
 </script>
