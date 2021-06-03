@@ -2,6 +2,7 @@
   <div class="flow-editor">
     <!-- 工具条 -->
     <div class="flow-editor-toolbar">
+      <el-button type="text" @click="previewJSON">查看JSON</el-button>
       <el-button type="text" @click="previewXML">查看XML</el-button>
       <el-button
         :disabled="scale <= 0.5"
@@ -38,6 +39,24 @@
         </span>
       </template>
     </el-dialog>
+
+    <el-dialog v-model="showJson" title="流程JSON" width="1050px" append-to-body>
+      <monaco-editor
+        :value="jsonContent"
+        :options="{
+          fontSize: 14,
+        }"
+        width="1000"
+        height="500"
+        theme="vs-dark"
+        language="json"
+      ></monaco-editor>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="showJson = false">关 闭</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -71,6 +90,8 @@ export default {
       editNode: null, // 编辑节点
       showXml: false,
       xmlContent: '',
+      showJson: false,
+      jsonContent: '',
     };
   },
   computed: {
@@ -93,6 +114,10 @@ export default {
     previewXML() {
       this.xmlContent = this.flowStore.buildXML();
       this.showXml = true;
+    },
+    previewJSON() {
+      this.jsonContent = JSON.stringify(this.flowStore.rootNode, null, 2);
+      this.showJson = true;
     },
     handleNodeClick(node) {
       this.editNode = node;
