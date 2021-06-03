@@ -27,6 +27,7 @@
           @delete="handleDelete(childNode)"
         ></flow-condition-node>
 
+        <!-- 如果节点需要特殊定制，可参考flow-condition-node进行改造 -->
         <flow-edit-node
           v-else
           :key="childNode.id"
@@ -34,7 +35,7 @@
           :class="childNode.type"
           :title="childNode.data.name"
           :bg-color="backgroundMap[childNode.type]"
-          :closeable="!['START', 'END'].includes(childNode.type) && !childNode.data.isDefault"
+          :closeable="!['START', 'END'].includes(childNode.type)"
           @add="handleAdd(childNode, $event)"
           @delete="handleDelete(childNode)"
         ></flow-edit-node>
