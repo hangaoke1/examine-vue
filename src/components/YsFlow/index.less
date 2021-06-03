@@ -86,7 +86,7 @@
         background-color: #c2c5cc;
       }
 
-      > .v-line {
+      >.v-line {
         height: 100px;
         width: 2px;
         margin-left: 50%;
@@ -108,24 +108,24 @@
       }
 
       .flow-branch-node:first-child {
-        > .top-line-mask {
+        >.top-line-mask {
           display: block;
           left: 0;
         }
 
-        > .bottom-line-mask {
+        >.bottom-line-mask {
           display: block;
           left: -1px;
         }
       }
 
       .flow-branch-node:last-child {
-        > .top-line-mask {
+        >.top-line-mask {
           display: block;
           right: 0;
         }
 
-        > .bottom-line-mask {
+        >.bottom-line-mask {
           display: block;
           right: -1px;
         }
@@ -161,7 +161,7 @@
         flex-direction: column;
       }
 
-      > .top-line-mask {
+      >.top-line-mask {
         display: none;
         position: absolute;
         top: -38px;
@@ -170,7 +170,7 @@
         background: #f5f6f9;
       }
 
-      > .top-v-line {
+      >.top-v-line {
         display: none;
         position: absolute;
         top: -37px;
@@ -181,14 +181,14 @@
         height: 37px;
       }
 
-      > .bottom-v-line {
+      >.bottom-v-line {
         display: block;
         width: 2px;
         background-color: #c2c5cc;
         flex-grow: 1;
       }
 
-      > .bottom-line-mask {
+      >.bottom-line-mask {
         display: none;
         position: absolute;
         width: 50%;
@@ -215,6 +215,36 @@
         z-index: 10;
         cursor: pointer;
         transition: box-shadow 0.3s ease;
+
+        .arrow-left {
+          display: none;
+          position: absolute;
+          left: 0;
+          top: 50%;
+          font-size: 20px;
+          transform: translate(-100%, -50%);
+        }
+
+        .arrow-right {
+          display: none;
+          position: absolute;
+          right: 0;
+          top: 50%;
+          font-size: 20px;
+          transform: translate(100%, -50%);
+        }
+
+        &:hover {
+          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
+
+          .arrow-left {
+            display: block;
+          }
+
+          .arrow-right {
+            display: block;
+          }
+        }
 
         .close-btn {
           position: absolute;
@@ -253,7 +283,7 @@
         background: #fff;
       }
 
-      > .v-line {
+      >.v-line {
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
@@ -297,6 +327,8 @@
         right: -25px;
         font-size: 22px;
       }
+
+
     }
   }
 }

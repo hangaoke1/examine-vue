@@ -4,8 +4,8 @@
       <title-input class="edit-panel-title" v-model="editNode.data.name"></title-input>
       <div class="edit-panel-content">自定义需要编辑的节点数据</div>
       <div class="edit-panel-footer">
-        <el-button>取 消</el-button>
-        <el-button type="primary">{{ '确 定' }}</el-button>
+        <el-button @click="handleCancel">取 消</el-button>
+        <el-button type="primary" @click="handleConfirm">确 定</el-button>
       </div>
     </div>
   </el-drawer>
@@ -19,6 +19,7 @@ export default {
   components: {
     TitleInput,
   },
+  inject: ['getFlowStore'],
   props: {
     node: Object,
   },
@@ -27,11 +28,25 @@ export default {
       editNode: null,
     };
   },
+  computed: {
+    flowStore() {
+      return this.getFlowStore();
+    },
+  },
   watch: {
     '$attrs.modelValue'(val) {
       if (val) {
         this.editNode = _.cloneDeep(this.node);
       }
+    },
+  },
+  methods: {
+    handleCancel() {
+      this.$emit('update:modelValue', false);
+    },
+    handleConfirm() {
+      this.flowStore.updateNodeData(this.node.id, this.editNode.data);
+      this.$emit('update:modelValue', false);
     },
   },
 };

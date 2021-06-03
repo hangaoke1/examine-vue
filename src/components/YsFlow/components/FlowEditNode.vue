@@ -70,6 +70,8 @@ export default {
       type: String,
       default: '#fff',
     },
+    branchIndex: Number,
+    branchCount: Number,
   },
   data() {
     return {

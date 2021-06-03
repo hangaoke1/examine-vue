@@ -13,6 +13,20 @@
           @addBranch="handleAddBranch(childNode)"
         ></flow-route-node>
 
+        <flow-condition-node
+          v-else-if="childNode.type === 'CONDITION'"
+          :key="childNode.id"
+          :node="childNode"
+          :class="childNode.type"
+          :title="childNode.data.name"
+          :bg-color="backgroundMap[childNode.type]"
+          :closeable="!childNode.data.isDefault"
+          :branch-index="branchIndex"
+          :branch-count="branchCount"
+          @add="handleAdd(childNode, $event)"
+          @delete="handleDelete(childNode)"
+        ></flow-condition-node>
+
         <flow-edit-node
           v-else
           :key="childNode.id"
@@ -32,18 +46,23 @@
 </template>
 
 <script>
-import FlowEditNode from '../components/FlowEditNode.vue';
 import FlowRouteNode from './FlowRouteNode.vue';
+import FlowEditNode from '../components/FlowEditNode.vue';
+import FlowConditionNode from './FlowConditionNode.vue';
+
 export default {
   name: 'FlowBranchNode',
   components: {
     FlowEditNode,
     FlowRouteNode,
+    FlowConditionNode,
   },
   inject: ['getFlowStore'],
   props: {
     node: Object,
     routeNode: Object,
+    branchIndex: Number,
+    branchCount: Number,
   },
   data() {
     return {

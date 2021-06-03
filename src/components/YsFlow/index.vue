@@ -10,12 +10,7 @@
         @click="scaleClick('minus')"
       />
       <span class="flow-editor-toolbar__scale">{{ (scale * 100).toFixed(0) }}%</span>
-      <el-button
-        :disabled="scale > 3"
-        icon="el-icon-plus"
-        size="mini"
-        @click="scaleClick('plus')"
-      />
+      <el-button :disabled="scale > 3" icon="el-icon-plus" size="mini" @click="scaleClick('plus')" />
     </div>
 
     <!-- 审批流主体 -->
